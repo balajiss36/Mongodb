@@ -44,7 +44,7 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 
 func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) { // Params is blank because we create{
 	u := models.User{}                                 // Save the output here
-	json.Unmarshal(r.Body, &u)                         // request body will be decoded and saved in u
+	json.NewDecoder(r.Body).Decode(&u)                 // request body will be decoded and saved in u
 	u.Id = bson.NewObjectId()                          // Create new user id for user
 	uc.session.DB("mongo-golang").C("users").Insert(u) // In the mongodb collection insert this user
 	ux, err := json.Marshal(u)
